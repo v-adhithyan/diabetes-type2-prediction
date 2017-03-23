@@ -5,6 +5,7 @@ import time
 
 real_values = []
 simulated_values = []
+saved_values = []
 lookup = []
 with open("input.csv", "rb") as input_file:
     reader = csv.DictReader(input_file)
@@ -23,11 +24,11 @@ for beta in range(25):
             gaussian_profile = numpy.random.normal()
             if gaussian_profile > aleatory_number:
                 acceptance_rate = acceptance_rate + 1
-                print "S({},{},{}) = {}".format(beta, i, alpha, gaussian_profile + error)
-                lookup.append("{}{}{}".format(beta, i, alpha))
+                acceptance = gaussian_profile + error
+                saved_values.append("{},{},{},{}".format(beta, i, alpha, acceptance))
 
 t2 = time.clock()
 print "The total time is {}".format(t2-t1)
 
 print acceptance_rate
-print len(lookup)
+print saved_values
