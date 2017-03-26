@@ -1,6 +1,7 @@
 import argparse
 import csv
 import matplotlib.pyplot as plt
+import math
 import numpy
 import random
 import time
@@ -23,6 +24,8 @@ with open("input.csv", "rb") as input_file:
     for row in reader:
         real_values.append(row)
 
+#simulated_values = real_values + simulated_values
+
 acceptance_rate = 0
 error = 0.08
 
@@ -35,6 +38,9 @@ def show_histogram(input):
 
     for val in x:
         y.append(input[val])
+
+    print "x {}".format(x)
+    print "y {}".format(y)
 
     hist, bins = numpy.histogram(y, bins = x)
     width = numpy.diff(bins)
@@ -94,6 +100,20 @@ def c_z(val):
 
     return (z * c) / x51
 
+def p_z(val):
+    x41 = 1.9
+    x42 = 0.09
+    x43 = 0.04
+    x44 = 0.05
+
+    num = 110.0 + (x42 * (val - 30) / 0.05)
+    den = 70.0 + (x43 * (val - 30) / 0.05)
+
+    return (x41 * num / den) + (x44 * (2 * random.random()) - 1)
+
+def ps_z(val):
+    return 1 - (d_z(val) * w_z(val) * g_z(val) * p_z(val) * c_z(val))
+
 def necrosis_wrto_glucose_and_depression():
     count = 0
     #print "The length of sim values is {}".format(len(simulated_values))
@@ -102,6 +122,12 @@ def necrosis_wrto_glucose_and_depression():
     age_count[60] = 0
     age_count[70] = 0
     age_count[80] = 0
+
+    p1 = 0
+    p2 = 0
+    p3 = 0
+    p4 = 0
+    p5 = 0
 
     for m in range(simulation_length):
         nj = random.randint(0, simulation_length - 1)
@@ -114,24 +140,53 @@ def necrosis_wrto_glucose_and_depression():
         if age >= 30 and age <=80:
             zk = age
             if d_z(age) > 0.5:
-                if g_z(glucose) > 0.5:
+                if g_z(age) > 0.5:
                     if c_z(age) > 0.66:
-                        #print age
+                        p1 = p1 + 1
                         if age >= 50 and age < 60:
-                            print "50"
+                            #print "50"
                             age_count[50] = age_count[50] + 1
                         if age >= 60 and age < 70:
-                            print "60"
+                            #print "60"
                             age_count[60] = age_count[60] + 1
                         if age >= 70 and age < 80:
-                            print "70"
+                            #print "70"
                             age_count[70] = age_count[70] + 1
                         if age >= 80:
-                            print "80"
+                            #print "80"
                             age_count[80] = age_count[80] + 1
+            if d_z(age) > 0.3:
+                if w_z(age) > 0.2:
+                    if g_z(age) > 0.4:
+                        if c_z(age) > 0.66:
+                            p2 = p2 + 1
+            if w_z(age) > 0.9:
+                if p_z(age) > 0.9:
+                    if c_z(age) > 0.66:
+                        p3 = p3 + 1
+            if ps_z(age) < 0.65:
+                #print "ps < 0.65"
+                a = 0
+            if w_z(age) > 0.8:
+                if g_z(age) > 0.5:
+                    if c_z(age) > 0.33 and c_z(age) < 0.66:
+                        p4 = p4 + 1
+            if g_z(age) > 0.5:
+                if p_z(age) > 0.9:
+                    if c_z(age) > 0.33 and c_z(age) < 0.66:
+                        p5 = p5 + 1
+            if ps_z(age) < 0.65:
+                #print
+                a = 5
 
-    print age_count
-    show_histogram(age_count)
+    #print age_count
+    #show_histogram(age_count)
+    print "Necrosis due to glucose and depression {}".format(p1)
+    print "Necrosis due to glucose overweight depression {}".format(p2)
+    print "Necrosis due to overweight sbp {}".format(p3)
+    print "Necrosis due to overweight and glucose {}".format(p4)
+    print "Necrosis due to glucose and sbp {}".format(p5)
+
     #print "The number of critic patients is {}".format(count)
 
 def identify_critical_patients():
