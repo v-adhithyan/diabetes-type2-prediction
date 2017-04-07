@@ -1,6 +1,5 @@
 import argparse
 import csv
-import matplotlib.pyplot as plt
 import math
 import numpy
 import random
@@ -28,31 +27,6 @@ with open("input.csv", "rb") as input_file:
 
 acceptance_rate = 0
 error = 0.08
-
-def show_histogram(input):
-    x = []
-    y = []
-    for k, v in input.items():
-        x.append(k)
-    x.sort()
-
-    for val in x:
-        y.append(input[val])
-
-    print "x {}".format(x)
-    print "y {}".format(y)
-
-    hist, bins = numpy.histogram(y, bins = x)
-    width = numpy.diff(bins)
-    center = (bins[:-1] + bins[1:]) / 2
-
-    #fig, ax = plt.subplots(figsize=(8,3))
-    #x.bar(center, hist, align='center', width=width)
-    #x.set_xticks(bins)
-    #fig.savefig("/tmp/out.png")
-    #plt.hist(y, bins = [40] + x)
-
-    plt.show()
 
 def is_depression(val):
     return val > 0 and val <= 0.33
