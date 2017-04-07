@@ -143,18 +143,6 @@ def necrosis_wrto_glucose_and_depression():
                 if g_z(age) > 0.5:
                     if c_z(age) > 0.66:
                         p1 = p1 + 1
-                        if age >= 50 and age < 60:
-                            #print "50"
-                            age_count[50] = age_count[50] + 1
-                        if age >= 60 and age < 70:
-                            #print "60"
-                            age_count[60] = age_count[60] + 1
-                        if age >= 70 and age < 80:
-                            #print "70"
-                            age_count[70] = age_count[70] + 1
-                        if age >= 80:
-                            #print "80"
-                            age_count[80] = age_count[80] + 1
             if d_z(age) > 0.3:
                 if w_z(age) > 0.2:
                     if g_z(age) > 0.4:
@@ -165,7 +153,6 @@ def necrosis_wrto_glucose_and_depression():
                     if c_z(age) > 0.66:
                         p3 = p3 + 1
             if ps_z(age) < 0.65:
-                #print "ps < 0.65"
                 a = 0
             if w_z(age) > 0.8:
                 if g_z(age) > 0.5:
@@ -179,20 +166,23 @@ def necrosis_wrto_glucose_and_depression():
                 #print
                 a = 5
 
-    #print age_count
-    #show_histogram(age_count)
+    # Adjusting as per error rate from paper
+    p1 = int(p1 * error)
+    p2 = int(p2 * error)
+    p3 = int(p3 * error)
+    p4 = int(p4 * error)
+    p5 = int(p5 * error)
+
     print "Necrosis due to glucose and depression {}".format(p1)
     print "Necrosis due to glucose overweight depression {}".format(p2)
     print "Necrosis due to overweight sbp {}".format(p3)
-    print "Necrosis due to overweight and glucose {}".format(p4)
-    print "Necrosis due to glucose and sbp {}".format(p5)
-
-    #print "The number of critic patients is {}".format(count)
+    print "Nepropathy due to overweight and glucose {}".format(p4)
+    print "Nepropathy due to glucose and sbp {}".format(p5)
 
 def identify_critical_patients():
     necrosis_wrto_glucose_and_depression()
 
-
+# The main program starts from here
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--simulate", help = "Run a new monte carlo simulation and use new values for prediction", action = "store_true")
