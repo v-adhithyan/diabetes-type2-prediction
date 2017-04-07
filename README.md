@@ -2,7 +2,7 @@
 
 # Files list
 
-* [Base paper](Base paper.pdf)
+* [Base paper](Base%20paper.pdf)
 * [Source code](simulation.py)
 * [Input data](input.csv)
 * [Simulated data](output.csv)
